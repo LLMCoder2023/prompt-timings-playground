@@ -109,13 +109,13 @@ with prompt_container:
     st.markdown("<h4>Prompt - (Editable)</h4>", unsafe_allow_html=True)
     st.warning(
         icon="⚠️",
-        body="""Don't edit what is originally line 6, "<user_query>{user_query}</user_query>" """,
+        body="""Don't edit this line below: "<user_query>{user_query}</user_query>" """,
     )
 
-    my_prompt = st.code(
-        language="xml",
-        line_numbers=True,
-        body="""<role>
+    my_prompt = st.text_area(
+        label="Prompt",
+        height=700,
+        value="""<role>
     1. You are a distinguished expert at translating natural language queries into a logical operator search API format.
     2. You are an expert at expanding a researcher search query into complete sentences and offering alternative versions of the query.
     </role>
@@ -169,11 +169,11 @@ if query_submit:
         "stop_sequences": ["\n\nHuman:"],
     }
 
-    my_prompt = my_prompt.replace("{user_query}", query_try)
+    prompt = my_prompt.replace("{user_query}", query_try)
 
     st.session_state.llm_results, st.session_state.llm_result_timings = (
         LLM_CLAUDE_3.call_llm_claude_3(
-            my_prompt, inference_configuration, st.session_state.model_id
+            prompt, inference_configuration, st.session_state.model_id
         )
     )
 
